@@ -22,6 +22,7 @@ function UserInputComponent({
         className="p-1 rounded-lg"
         placeholder={placeholder}
         onChange={onChangeHandler}
+        value={value}
       />
     </>
   )

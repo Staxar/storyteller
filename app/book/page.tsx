@@ -1,6 +1,7 @@
 'use client'
 
 import PersonalInformationsForm from '@/components/Form/PersonalInformationsForm'
+import StoryInformationForm from '@/components/Form/StoryInformationForm'
 import { GlobeAsiaAustraliaIcon } from '@heroicons/react/20/solid'
 import {
   RocketLaunchIcon,
@@ -76,15 +77,9 @@ export default function Book() {
         <div className="h-12 w-full flex flex-row gap-6 justify-center">
           <UserCircleIcon />
           <RocketLaunchIcon />
-          <BoltIcon />
-          <GlobeAsiaAustraliaIcon />
-          <CloudIcon />
-          <StarIcon />
-          <InformationCircleIcon />
-          <PhotoIcon />
         </div>
       </div>
-      <div className="p-4 w-[500px]">
+      <div className="p-4 w-[500px] ">
         <PersonalInformationsForm />
       </div>
     </div>
