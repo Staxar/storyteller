@@ -73,6 +73,13 @@ export default function Book() {
       <div className="p-4 w-[500px] ">
         <PersonalInformationsForm />
       </div>
+      <button
+        title="Press me!"
+        className="h-6 bg-cyan-500 rounded p-4 items-center justify-center text-center flex active:bg-slate-600"
+        onClick={() => console.log('first')}
+      >
+        Press me!
+      </button>
     </div>
   )
 }
