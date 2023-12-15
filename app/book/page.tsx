@@ -1,64 +1,23 @@
-'use client'
-
 import PersonalInformationsForm from '@/components/Form/PersonalInformationsForm'
-import StoryInformationForm from '@/components/Form/StoryInformationForm'
-import { GlobeAsiaAustraliaIcon } from '@heroicons/react/20/solid'
-import {
-  RocketLaunchIcon,
-  UserCircleIcon,
-  CloudIcon,
-} from '@heroicons/react/24/outline'
-import {
-  BoltIcon,
-  StarIcon,
-  InformationCircleIcon,
-  PhotoIcon,
-} from '@heroicons/react/24/solid'
 
-import { ChangeEvent, useState } from 'react'
+async function getData() {
+  const res = await fetch('http://localhost:3000/api/openai', {
+    method: 'POST',
+    body: JSON.stringify({
+      messages: [{ role: 'user', content: 'What is a capital of Poland?' }],
+    }),
+  })
 
-interface Intrests {
-  favoriesGames: string
-  favoritesBooks: string
-  favoriesMovies: string
-  favoritesColors: string
-  favoritesHobby: string
+  if (!res.ok) {
+    throw new Error('Failed to fetch data!')
+  }
+  console.log('res:::: ', res)
+  return res.json()
 }
 
-interface Characterisc {
-  characterAnimals: string
-  characterWords: string
-  characterFeature: string
-}
-interface Places {
-  favoriesHome: string
-  favoriesOutside: string
-  favoritesVacation: string
-}
-
-interface Dreams {
-  dream: string
-  ambitions: string
-}
-
-interface SpecialEvents {
-  specialEvent: string
-  specyficEvent: string
-}
-
-interface AdditionalInfo {
-  additionalInformations: string
-}
-
-//to Change
-interface Pictures {
-  childPictureFace: string
-  familyPicture: string
-  homePicture: string
-  favoritesPicture: string
-}
-
-export default function Book() {
+export default async function Book() {
+  const data = await getData()
+  console.log(data)
   return (
     <div className="h-full w-full flex flex-col items-center p-24">
       <div className="p-8">
@@ -76,7 +35,6 @@ export default function Book() {
       <button
         title="Press me!"
         className="h-6 bg-cyan-500 rounded p-4 items-center justify-center text-center flex active:bg-slate-600"
-        onClick={() => console.log('first')}
       >
         Press me!
       </button>

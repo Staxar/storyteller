@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ChangeEvent, ReactNode, useState } from 'react'
 import UserInputComponent from '../UserInputComponent'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
