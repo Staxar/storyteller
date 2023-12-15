@@ -1,0 +1,24 @@
+{
+  "bookMoods": [
+    "Adventurous",
+    "Mysterious",
+    "Romantic",
+    "Humorous",
+    "Serious/Dramatic",
+    "Scary/Thrilling",
+    "Hopeful/Optimistic",
+    "Melancholic/Sad",
+    "Fantastical/Whimsical",
+    "Energetic/Upbeat",
+    "Thoughtful/Philosophical",
+    "Epic/Grand",
+    "Satirical",
+    "Cynical/Dystopian",
+    "Nostalgic",
+    "Wholesome",
+    "Experimental",
+    "Inspirational",
+    "Realistic",
+    "Surreal"
+  ]
+}

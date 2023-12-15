@@ -59,26 +59,17 @@ interface Pictures {
 }
 
 export default function Book() {
-  //   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //     const { name, value } = event.target
-
-  //     setPersonalInformaton((prevInfo) => ({
-  //       ...prevInfo,
-  //       [name]: value,
-  //     }))
-  //   }
-
   return (
     <div className="h-full w-full flex flex-col items-center p-24">
       <div className="p-8">
         <p className="text-xl">Give us some information to create adventure</p>
       </div>
-      <div className="h-full w-full">
-        <div className="h-12 w-full flex flex-row gap-6 justify-center">
-          <UserCircleIcon />
-          <RocketLaunchIcon />
-        </div>
-      </div>
+
+      {/* <div className="h-12 flex flex-row gap-6 justify-center w-1/2">
+        <UserCircleIcon />
+        <RocketLaunchIcon />
+      </div> */}
+
       <div className="p-4 w-[500px] ">
         <PersonalInformationsForm />
       </div>
