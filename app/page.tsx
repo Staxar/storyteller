@@ -18,11 +18,16 @@ export default function Home() {
           <div className="w-1/2">
             <p className="text-5xl">Let's start your kid journey!</p>
           </div>
-          <Image src={backgroundImage} alt="bg-image" className="w-1/2" />
+          <Image
+            src={backgroundImage}
+            alt="bg-image"
+            className="w-1/2"
+            priority
+          />
         </div>
       </section>
       <section>
-        <div className="">x</div>
+        <div className=""></div>
       </section>
       <section>
         <div className="">x</div>
