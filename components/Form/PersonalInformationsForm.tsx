@@ -11,14 +11,18 @@ interface InputObject {
   icon: ReactNode
 }
 
-interface FormInformations {
+export interface FormInformations {
   [key: string]: InputObject
+}
+
+interface PersonalForm {
+  data: (Personaldata: FormInformations, Storydata: FormInformations) => void
+  getOpenAI: () => void
 }
 
 function useForm(initialState: FormInformations) {
   const [formInformations, setFormInformations] =
     useState<FormInformations>(initialState)
-
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement>,
     key: string
@@ -33,7 +37,7 @@ function useForm(initialState: FormInformations) {
   return { formInformations, handleInputChange }
 }
 
-function PersonalInformationsForm() {
+function PersonalInformationsForm({ data, getOpenAI }: PersonalForm) {
   const personalForm = useForm({
     childName: {
       value: '',
@@ -127,6 +131,16 @@ function PersonalInformationsForm() {
           ))}
         </div>
       ))}
+      <button
+        title="Press me!"
+        className="h-6 bg-cyan-500 rounded p-4 items-center justify-center text-center flex active:bg-slate-600"
+        onClick={() => {
+          data(personalForm.formInformations, storyForm.formInformations)
+          getOpenAI()
+        }}
+      >
+        Press me!
+      </button>
     </div>
   )
 }
