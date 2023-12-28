@@ -13,11 +13,10 @@ export default function Home() {
           <div className="flex gap-4">
             <p>Menu</p>
             <p>About</p>
-            <p>Design</p>
+            <Link href={'/design'}>Design</Link>
             <Link href={'/book'}>Book</Link>
           </div>
           <div className="flex">
-            <p>Theme icon</p>
             <p>User icon</p>
           </div>
         </header>
