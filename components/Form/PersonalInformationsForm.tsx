@@ -1,4 +1,6 @@
-import React, { ChangeEvent, ReactNode, useState } from 'react'
+'use client'
+
+import React, { ChangeEvent, ReactNode, useCallback, useState } from 'react'
 import UserInputComponent from '../UserInputComponent'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 interface InputObject {
@@ -9,14 +11,18 @@ interface InputObject {
   icon: ReactNode
 }
 
-interface FormInformations {
+export interface FormInformations {
   [key: string]: InputObject
+}
+
+interface PersonalForm {
+  data: (Personaldata: FormInformations, Storydata: FormInformations) => void
+  // getOpenAI: () => void
 }
 
 function useForm(initialState: FormInformations) {
   const [formInformations, setFormInformations] =
     useState<FormInformations>(initialState)
-
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement>,
     key: string
@@ -24,14 +30,22 @@ function useForm(initialState: FormInformations) {
     const { value } = event.target
     setFormInformations((prev) => ({
       ...prev,
-      [key]: { ...prev[key], value },
+      [key]: { ...prev[key], value, isValid: validateInput(key, value) },
     }))
+  }
+
+  const validateInput = (key: string, value: string): boolean => {
+    if (key === 'age') {
+      const age = parseInt(value, 10)
+      return !isNaN(age) && age > 0
+    }
+    return true
   }
 
   return { formInformations, handleInputChange }
 }
 
-function PersonalInformationsForm() {
+function PersonalInformationsForm({ data }: PersonalForm) {
   const personalForm = useForm({
     childName: {
       value: '',
@@ -101,6 +115,40 @@ function PersonalInformationsForm() {
     },
   })
 
+  async function buttonHandler() {
+    // Check and update validity for personal form inputs
+    Object.keys(personalForm.formInformations).forEach((key) => {
+      const info = personalForm.formInformations[key]
+      personalForm.formInformations[key].isValid = info.value.trim() !== ''
+    })
+
+    // Check and update validity for story form inputs
+    Object.keys(storyForm.formInformations).forEach((key) => {
+      const info = storyForm.formInformations[key]
+      storyForm.formInformations[key].isValid = info.value.trim() !== ''
+    })
+
+    // Check if all personal form inputs are valid
+    const personalFormValid = Object.values(
+      personalForm.formInformations
+    ).every((info) => info.isValid)
+
+    // Check if all story form inputs are valid
+    const storyFormValid = Object.values(storyForm.formInformations).every(
+      (info) => info.isValid
+    )
+
+    // If both personal and story forms are valid, execute the data function
+    if (personalFormValid && storyFormValid) {
+      data(personalForm.formInformations, storyForm.formInformations)
+    } else {
+      // If any form input is not filled in, set isValid to false and log an error message
+      console.error(
+        'Form validation failed. Please fill in all required inputs.'
+      )
+    }
+  }
+
   return (
     <div className="flex flex-row gap-4">
       {['personal', 'book'].map((formType) => (
@@ -114,6 +162,7 @@ function PersonalInformationsForm() {
               key={key}
               icon={info.icon}
               placeholder={info.placeholder}
+              isValid={info.isValid}
               value={info.value}
               onChangeHandler={(event) =>
                 formType === 'personal'
@@ -125,6 +174,13 @@ function PersonalInformationsForm() {
           ))}
         </div>
       ))}
+      <button
+        title="Press me!"
+        className="box-content h-6 bg-cyan-500 rounded p-4 items-center justify-center text-center flex active:bg-slate-600"
+        onClick={buttonHandler}
+      >
+        Press me!
+      </button>
     </div>
   )
 }

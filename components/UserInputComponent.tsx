@@ -7,6 +7,7 @@ interface userInputInterface {
   onChangeHandler?: (textInput: ChangeEvent<HTMLInputElement>) => void
   label: string
   icon: ReactNode
+  isValid: boolean
 }
 
 function UserInputComponent({
@@ -15,6 +16,7 @@ function UserInputComponent({
   onChangeHandler,
   label,
   icon,
+  isValid,
 }: userInputInterface) {
   return (
     <>
@@ -26,7 +28,9 @@ function UserInputComponent({
         <input
           name={placeholder}
           type="text"
-          className="h-full w-full bg-transparent mx-2 focus: outline-none "
+          className={`h-full w-full mx-2 focus: outline-none ${
+            isValid ? 'bg-transparent' : 'bg-red-700'
+          }`}
           placeholder={placeholder}
           onChange={onChangeHandler}
           value={value}
