@@ -7,7 +7,6 @@ import bgImage from '../../assets/Firefly landing page background, illustration 
 import BOOK from '../../assets/data/bookStory.json'
 import { v4 as uuidv4 } from 'uuid'
 type BookProps = {
-  number: string
   content?: string
   title: string
 }
@@ -62,19 +61,18 @@ export default function About() {
         disableFlipByClick={true}
         style={{}}
       >
-        <PageCover number={uuidv4()} key={0} ref={pageRef} title={BOOK.title} />
+        <PageCover key={uuidv4()} ref={pageRef} title={BOOK.title} />
         {BOOK.chapters.map((chapter, index) => {
           return (
             <Page
-              number={uuidv4()}
-              key={index}
+              key={uuidv4()}
               ref={pageRef}
               content={chapter.content}
               title={chapter.title}
             />
           )
         })}
-        <PageCover number={uuidv4()} key={0} ref={pageRef} title={'THE END'} />
+        <PageCover key={uuidv4()} ref={pageRef} title={'THE END'} />
       </HTMLFlipBook>
     )
   }
@@ -83,7 +81,7 @@ export default function About() {
       <h1>
         <DNA />
       </h1>
-      <div className="flex justify-center items-center w-full h-full">
+      <div className="flex justify-center items-center h-600">
         <MyBook />
       </div>
     </div>

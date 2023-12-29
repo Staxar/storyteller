@@ -21,19 +21,11 @@ export default function Home() {
           </div>
         </header>
       </section>
-      <section className="w-full h-full">
-        <div className="flex flex-row justify-between">
-          <div className="w-1/2">
-            <p className="text-5xl">Let's start your kid journey!</p>
-            <p className="text-4xl">Create your own personalized book!</p>
-          </div>
+      <section className="w-full h-full p-4">
+        <div className="flex flex-col justify-between p-4 m-4 w-2/3 gap-8">
+          <p className="text-6xl">Let's start your kid journey!</p>
+          <p className="text-4xl">Create your own personalized book!</p>
         </div>
-      </section>
-      <section>
-        <div className=""></div>
-      </section>
-      <section>
-        <div className="">x</div>
       </section>
     </main>
   )
