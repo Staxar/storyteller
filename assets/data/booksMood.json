@@ -20,5 +20,22 @@
     "Inspirational",
     "Realistic",
     "Surreal"
+  ],
+  "bookGenre": [
+    "Action and Adventure",
+    "Mystery",
+    "Science Fiction",
+    "Fantasy",
+    "Romance",
+    "Horror",
+    "Thriller",
+    "Historical Fiction",
+    "Biography",
+    "Self-Help",
+    "Humor",
+    "Poetry",
+    "Children's",
+    "Young Adult",
+    "Non-fiction"
   ]
 }

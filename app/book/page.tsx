@@ -1,90 +1,114 @@
-'use client'
-import { useEffect, useState } from 'react'
-import PersonalInformationsForm, {
-  FormInformations,
-} from '@/components/Form/PersonalInformationsForm'
-import { Audio } from 'react-loader-spinner'
+import BookForm from '@/components/Form/BookForm'
+import BookData from '../../assets/data/booksMood.json'
+const PersonalFormData: dataObject[] = [
+  {
+    field: 'name',
+    data: {
+      placeholder: 'eg. Tom',
+      name: 'Name',
+      type: 'input',
+    },
+  },
+  {
+    field: 'gender',
+    data: {
+      placeholder: 'eg. Male',
+      name: 'Gender',
+      type: 'input',
+    },
+  },
+  {
+    field: 'age',
+    data: {
+      placeholder: 'eg. Tom',
+      name: 'Age',
+      type: 'input',
+    },
+  },
+  {
+    field: 'eyesColor',
+    data: {
+      placeholder: 'eg. blue',
+      name: 'Eyes Color',
+      type: 'input',
+    },
+  },
+  {
+    field: 'hairColor',
+    data: {
+      placeholder: 'eg. dark brown',
+      name: 'Hair Color',
+      type: 'input',
+    },
+  },
+]
+
+const StoryFormData: dataObject[] = [
+  {
+    field: 'genre',
+    data: {
+      placeholder: 'eg. Fantasy',
+      name: 'Book genre',
+      type: 'select',
+      additionalData: BookData.bookGenre,
+    },
+  },
+  {
+    field: 'mood',
+    data: {
+      placeholder: 'eg. Humorous',
+      name: 'Book mood',
+      type: 'select',
+      additionalData: BookData.bookMoods,
+    },
+  },
+  {
+    field: 'placeOfAction',
+    data: {
+      placeholder: 'eg. Forest',
+      name: 'Place of action',
+      type: 'input',
+    },
+  },
+  {
+    field: 'additionalInfo',
+    data: {
+      placeholder: 'eg. Magic items, characters...',
+      name: 'Additional informations',
+      type: 'input',
+    },
+  },
+]
+
+type BookGenres = {
+  bookMoods: string[]
+  bookGenre: string[]
+}
+export interface dataObject {
+  field:
+    | 'name'
+    | 'gender'
+    | 'age'
+    | 'eyesColor'
+    | 'hairColor'
+    | 'genre'
+    | 'mood'
+    | 'placeOfAction'
+    | 'additionalInfo'
+  data: {
+    placeholder: string
+    name: string
+    type: string
+    additionalData?: string[]
+  }
+}
+
+const formData: dataObject[][] = [PersonalFormData, StoryFormData]
 
 export default function Book() {
-  const [response, setResponse] = useState<string | null>(null)
-  const [personalFormData, setPersonalFormData] = useState<FormInformations>()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [storyFormData, setStoryFormData] = useState<FormInformations>()
-
-  const getData = async (message: string): Promise<string | null> => {
-    try {
-      const res = await fetch('http://localhost:3000/api/openai', {
-        method: 'POST',
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: message }],
-        }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch data!')
-      }
-
-      return res.text()
-    } catch (error) {
-      console.error('Error fetching data:', error)
-
-      return null
-    }
-  }
-
-  useEffect(() => {
-    const getOpenAIData = async () => {
-      if (personalFormData !== undefined && storyFormData !== undefined) {
-        setLoading(true)
-        try {
-          const prompt = generatePrompt()
-          await getData(prompt)
-            .then((response) => setResponse(response))
-            .finally(() => setLoading(false))
-        } catch (error) {
-          setLoading(false)
-          console.log('getOpenAIData:', error)
-        }
-      }
-    }
-    getOpenAIData()
-  }, [personalFormData, storyFormData])
-
-  const generatePrompt = (): string => {
-    const prompt = `Write a short story for children based on information. Feel free to create additional characters or anything you want, Main Character: {Name: ${personalFormData?.childName.value}, Gender: ${personalFormData?.gender.value}, Age: ${personalFormData?.age.value}, Eyes color: ${personalFormData?.eyesColor.value}, Hair color: ${personalFormData?.hairColor.value}} Story: {Story genre: ${storyFormData?.genre.value}, Story mood: ${storyFormData?.mood.value}, Place of action: ${storyFormData?.placeOfAction.value}, Additional informations: ${storyFormData?.additionalInfo.value}}`
-    return prompt
-  }
-
   return (
-    <div className="h-full w-full flex flex-col items-center p-24">
-      <div className="p-8">
-        <p className="text-xl">Give us some information to create adventure</p>
-      </div>
-
-      <div className="p-4 w-[500px]">
-        {loading ? (
-          <Audio
-            height="100"
-            width="100"
-            color="#4fa94d"
-            ariaLabel="audio-loading"
-            wrapperStyle={{}}
-            wrapperClass="wrapper-class"
-            visible={true}
-          />
-        ) : (
-          <PersonalInformationsForm
-            data={(personalFormData, storyFormData) => {
-              setPersonalFormData(personalFormData)
-              setStoryFormData(storyFormData)
-            }}
-          />
-        )}
-        <div className="h-full w-full">
-          <p className="h-full w-full">{response}</p>
-        </div>
-      </div>
+    <div className="flex flex-1 p-8 justify-center items-center">
+      <BookForm data={formData} />
     </div>
   )
 }
