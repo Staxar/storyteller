@@ -1,5 +1,7 @@
 import BookForm from '@/components/Form/BookForm'
 import BookData from '../../assets/data/booksMood.json'
+import { Card } from '@/components/ui/card'
+import {} from 'react'
 const PersonalFormData: dataObject[] = [
   {
     field: 'name',
@@ -107,8 +109,13 @@ const formData: dataObject[][] = [PersonalFormData, StoryFormData]
 
 export default function Book() {
   return (
-    <div className="flex flex-1 p-8 justify-center items-center">
-      <BookForm data={formData} />
+    <div className="flex flex-col p-8 justify-center items-center">
+      <div className="p-4 text-4xl">
+        <p>Give us some information to create unique story</p>
+      </div>
+      <Card className="p-2">
+        <BookForm data={formData} />
+      </Card>
     </div>
   )
 }

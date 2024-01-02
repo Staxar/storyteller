@@ -47,14 +47,8 @@ const formSchema = z.object({
     .string()
     .min(2, { message: 'Hair color must be at least 3 characters.' })
     .max(255, { message: 'Too much characters!' }),
-  genre: z
-    .string()
-    .min(3, { message: 'Book genre should at least 3 characters.' })
-    .max(255, { message: 'Too much characters!' }),
-  mood: z
-    .string()
-    .min(2, { message: 'Hair color must be at least 3 characters.' })
-    .max(255, { message: 'Too much characters!' }),
+  genre: z.string(),
+  mood: z.string(),
   placeOfAction: z
     .string()
     .min(2, { message: 'Hair color must be at least 3 characters.' })
@@ -80,8 +74,8 @@ export default function BookForm({ data }: DataInterface) {
       age: 0,
       eyesColor: '',
       hairColor: '',
-      genre: '',
-      mood: '',
+      genre: data?.[1]?.[0]?.data?.additionalData?.[0] || '',
+      mood: data?.[1]?.[1]?.data?.additionalData?.[0] || '',
       placeOfAction: '',
       additionalInfo: '',
     },
@@ -95,7 +89,7 @@ export default function BookForm({ data }: DataInterface) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex ">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 items-center">
           <div className="flex flex-row gap-8">
             <div className="flex flex-col">
               {data[0].map((item) => {
@@ -150,6 +144,9 @@ export default function BookForm({ data }: DataInterface) {
                                       item.data.additionalData
                                         ? item.data.additionalData[0]
                                         : ''
+                                    }
+                                    defaultValue={
+                                      item?.data?.additionalData?.[0] || ''
                                     }
                                   />
                                 </SelectTrigger>
