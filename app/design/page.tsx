@@ -10,7 +10,7 @@ export default function Design() {
   const getImage = async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/api/dalle', {
+      const res = await fetch('/api/dalle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       })

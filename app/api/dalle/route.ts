@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiResponse } from 'next'
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
@@ -15,10 +15,12 @@ export async function POST(
   request: Request,
   response: NextApiResponse<ResponseData>
 ) {
+  const { messages } = await request.json()
+
   try {
     const response = await openai.images.generate({
-      model: 'dall-e-2',
-      prompt: 'a white siamese cat',
+      model: 'dall-e-3',
+      prompt: messages[0].prompt,
       size: '1024x1024',
       quality: 'standard',
       n: 1,

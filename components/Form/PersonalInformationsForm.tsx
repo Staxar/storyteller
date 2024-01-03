@@ -116,33 +116,24 @@ function PersonalInformationsForm({ data }: PersonalForm) {
   })
 
   async function buttonHandler() {
-    // Check and update validity for personal form inputs
     Object.keys(personalForm.formInformations).forEach((key) => {
       const info = personalForm.formInformations[key]
       personalForm.formInformations[key].isValid = info.value.trim() !== ''
     })
-
-    // Check and update validity for story form inputs
     Object.keys(storyForm.formInformations).forEach((key) => {
       const info = storyForm.formInformations[key]
       storyForm.formInformations[key].isValid = info.value.trim() !== ''
     })
-
-    // Check if all personal form inputs are valid
     const personalFormValid = Object.values(
       personalForm.formInformations
     ).every((info) => info.isValid)
 
-    // Check if all story form inputs are valid
     const storyFormValid = Object.values(storyForm.formInformations).every(
       (info) => info.isValid
     )
-
-    // If both personal and story forms are valid, execute the data function
     if (personalFormValid && storyFormValid) {
       data(personalForm.formInformations, storyForm.formInformations)
     } else {
-      // If any form input is not filled in, set isValid to false and log an error message
       console.error(
         'Form validation failed. Please fill in all required inputs.'
       )

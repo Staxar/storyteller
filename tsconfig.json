@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/api/openai/route.js",
-    "app/api/openai/route.js"
+    "app/api/openai/route.js",
+    "tailwind.config.js"
   ],
   "exclude": ["node_modules"]
 }
