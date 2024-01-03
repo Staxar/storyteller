@@ -39,7 +39,7 @@ export default function About() {
       <HTMLFlipBook
         width={500}
         height={450}
-        className={''}
+        className={'bg-slate-500'}
         startPage={0}
         size={'fixed'}
         minWidth={300}

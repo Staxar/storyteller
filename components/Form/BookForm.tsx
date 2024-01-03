@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { dataObject } from '@/app/book/page'
+import { dataObject, formObject } from '@/app/book/page'
 import {
   Select,
   SelectContent,
@@ -36,8 +36,7 @@ const formSchema = z.object({
     .min(2, {
       message: 'Gender must be at least 4 characters',
     })
-    .max(255, { message: 'Too much characters!' })
-    .optional(),
+    .max(255, { message: 'Too much characters!' }),
   age: z.coerce.number().positive({ message: 'Age must be positive number!' }),
   eyesColor: z
     .string()
@@ -61,9 +60,10 @@ const formSchema = z.object({
 
 interface DataInterface {
   data: dataObject[][]
+  formDataResponse: (values: formObject) => void
 }
 
-export default function BookForm({ data }: DataInterface) {
+export default function BookForm({ data, formDataResponse }: DataInterface) {
   //   console.log(Object.keys(formSchema.shape))
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -84,7 +84,7 @@ export default function BookForm({ data }: DataInterface) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+    formDataResponse(values)
   }
   return (
     <Form {...form}>

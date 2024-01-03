@@ -1,0 +1,36 @@
+{
+  "story": {
+    "chapters": [
+      {
+        "chapter_number": "Chapter 1",
+        "content": "Once upon a time, there was an 8-year-old boy named Marcin. With his dark brown hair and twinkling blue eyes always filled with curiosity and imagination, he loved dreaming about space and the infinite stars. One night, a strange beam of light engulfed his bedroom, and a mysterious message appeared from his toy telescope: a galactic invitation to a planets and stars party!",
+        "title": "A Celestial Invitation"
+      },
+      {
+        "chapter_number": "Chapter 2",
+        "content": "The beam led Marcin to his backyard, where a dazzling spaceship awaited. The ship, covered in gleaming silver and sparkling lights, housed state-of-the-art technology unseen by anyone on Earth. Filled with anticipation and feeling surprisingly brave, Marcin stepped into the spaceship, ready to venture into the vastness of space.",
+        "title": "The Stellar Spaceship"
+      },
+      {
+        "chapter_number": "Chapter 3",
+        "content": "Marcin, the Earth-boy, embarked on a fantastic journey, visiting mortal planets, swirling galaxies, and shooting stars. He was a natural explorer, with courage as vast as the universe itself. His tiny spacecraft took him through colossal meteor showers and past glittering nebulas, filling the young boy’s heart with stories untold, galaxies undiscovered.",
+        "title": "A Cosmic Journey"
+      }
+    ],
+    "title": "Starbound: Marcin's Space Adventure"
+  },
+  "prompts": [
+    {
+      "chapter": "Chapter 1",
+      "description": "A young boy with dark brown hair and blue eyes, surprised as a beam of celestial light invites him into the universe from his bedroom, digital art."
+    },
+    {
+      "chapter": "Chapter 2",
+      "description": "An 8-year-old boy taking his first step inside a radiant spaceship in his backyard, surrounded by the luminosity of technology unknown to the world, digital art."
+    },
+    {
+      "chapter": "Chapter 3",
+      "description": "A bright-eyed, brave boy navigating supernatural paths amid planets, meteors, and nebulas in a spaceship, digital art."
+    }
+  ]
+}
