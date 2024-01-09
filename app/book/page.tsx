@@ -142,6 +142,7 @@ const Book: React.FC = () => {
   const [response, setResponse] = useState<StoryObject | null>(null)
   const [images, setImages] = useState<string[]>([])
   const [formResponse, setFormResponse] = useState<formObject | undefined>()
+  const [pdfUrl, setPdfUrl] = useState<string>('')
 
   const getData = async (message: string): Promise<StoryObject | null> => {
     try {
@@ -205,6 +206,8 @@ const Book: React.FC = () => {
 
           const imageResults = await Promise.all(imagePromises)
           setImages(imageResults.filter((image) => image !== null) as string[])
+          let pdf = await createPdf()
+          setPdfUrl(pdf ? pdf : '')
         } catch (error) {
           console.log('getOpenAIData:', error)
         } finally {
@@ -221,6 +224,68 @@ const Book: React.FC = () => {
     return prompt
   }
 
+  const fetchImageFromAPI = async (url: string) => {
+    try {
+      const response = await axios.get('/api/image', {
+        params: { url: url },
+      })
+      const base64 = Buffer.from(response.data, 'binary').toString('base64')
+      const imageUrl = `data:${response.headers['content-type']};base64,${base64}`
+      return imageUrl
+    } catch (error) {
+      console.error('Error fetching image:', error)
+      return null
+    }
+  }
+
+  console.log(response)
+
+  const createPdf = async () => {
+    const pdf = new jsPDF()
+    const maxWidth = pdf.internal.pageSize.getWidth()
+    const maxHeight = pdf.internal.pageSize.getHeight()
+    pdf.setProperties({
+      title: response?.story.title,
+    })
+
+    if (typeof response?.story.title === 'string') {
+      const imageDataPromises = images.map((image) => fetchImageFromAPI(image))
+      const imageDataArray = await Promise.all(imageDataPromises)
+
+      imageDataArray.forEach((imageData, index) => {
+        pdf.addPage()
+        pdf.addImage(
+          imageData ? imageData : '',
+          'JPEG',
+          0,
+          0,
+          maxWidth,
+          maxHeight
+        )
+        pdf.setFont('courier', 'bolditalic')
+        pdf.setTextColor('white')
+        pdf.setFontSize(30)
+
+        if (index === 0) {
+          const title = pdf.splitTextToSize(response?.story.title, 150)
+          pdf.text(title, 50, 50)
+        } else {
+          const chapter = response.story.chapters[index - 1]
+          const chapterTitle = pdf.splitTextToSize(chapter.title, 150)
+          pdf.text(chapterTitle, 25, 50)
+          pdf.setFontSize(18)
+          const chapterContent = pdf.splitTextToSize(chapter.content, 150)
+          pdf.text(chapterContent, maxWidth / 5, 100, { lineHeightFactor: 1.5 })
+        }
+      })
+
+      const outString = pdf.output('datauristring', { filename: 'testPDF' })
+      return outString
+    } else {
+      console.error('Title is not a string.')
+    }
+  }
+
   return (
     <div className="flex flex-col p-8 justify-center items-center">
       <div className="p-4 text-4xl">
@@ -233,6 +298,17 @@ const Book: React.FC = () => {
           <BookForm data={formData} formDataResponse={setFormResponse} />
         )}
       </Card>
+      <Card>
+        {pdfUrl !== '' && (
+          <iframe
+            src={`${pdfUrl}#zoom=40`}
+            id="pdf"
+            width={1000}
+            height={600}
+          />
+        )}
+      </Card>
+      <button onClick={() => createPdf()}>Test IMAGE</button>
     </div>
   )
 }
