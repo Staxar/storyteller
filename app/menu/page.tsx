@@ -23,7 +23,6 @@ export default function Menu() {
 
   const createPdf = async () => {
     const pdf = new jsPDF()
-
     const maxWidth = pdf.internal.pageSize.getWidth()
     const maxHeight = pdf.internal.pageSize.getHeight()
     pdf.setProperties({
@@ -40,7 +39,7 @@ export default function Menu() {
       const title = pdf.splitTextToSize(fakeData.story.title, 150)
       pdf.text(title, 50, 50)
 
-      fakeData.story.chapters.forEach((chapter) => {
+      fakeData.story.chapters.forEach((chapter, index) => {
         pdf.addPage()
         pdf.addImage(imageData, 'JPEG', 0, 0, maxWidth, maxHeight)
         pdf.setFont('courier', 'bolditalic')
@@ -50,7 +49,7 @@ export default function Menu() {
         pdf.text(chapterTitle, 25, 50)
         pdf.setFontSize(18)
         const chapterContent = pdf.splitTextToSize(chapter.content, 150)
-        pdf.text(chapterContent, 50, 100)
+        pdf.text(chapterContent, maxWidth / 5, 100, { lineHeightFactor: 1.5 })
       })
 
       const outString = pdf.output('datauristring', { filename: 'testPDF' })
