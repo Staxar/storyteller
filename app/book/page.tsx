@@ -8,7 +8,6 @@ import { DNA } from 'react-loader-spinner'
 import StoryData from '../../assets/data/fakeData.json'
 import jsPDF from 'jspdf'
 import axios, { AxiosResponse } from 'axios'
-import Image from 'next/image'
 
 const PersonalFormData: dataObject[] = [
   {
@@ -221,20 +220,13 @@ const Book: React.FC = () => {
     getOpenAIData()
   }, [formResponse])
 
-  const [pdfUrl, setPdfUrl] = useState('')
+  const [pdfUrl] = useState('')
 
   const generatePrompt = (): string => {
     const prompt = `Write a short story for children based on the information. Add a title for the story, each chapter should have its own title, use proper formatting to separate the title from the content, feel free to create additional characters or whatever you want, Main Character: {Name: ${formResponse?.name}, Gender: ${formResponse?.gender}, Age: ${formResponse?.age}, Eyes color: ${formResponse?.eyesColor}, Hair color: ${formResponse?.hairColor}} Story: {Story genre: ${formResponse?.genre}, Story mood: ${formResponse?.mood}, Place of action: ${formResponse?.placeOfAction}, Additional informations: ${formResponse?.additionalInfo}} Use appropriate story length guidelines for different age groups, depending on the age of the child. The story should be no longer than a few pages. When you finish the story write prompts for dall-e api to create a picture for the cover of the book and each chapter based on the story. Each prompt should include a description of the protagonist (no name, just his characteristics), for each prompt add ",digital art" at the end. The photos should represent as best as possible what happened in the story. Do not add unnecessary comments, the output format is JSON. Split only into story and prompts in format - story: An object containing the title of the overall story and an array of chapters. - title: A string representing the title of the entire story.    - chapters: An array of objects, each representing a chapter in the story. - chapter_number: A string representing the chapter number or identifier.      - title: A string representing the title of the chapter.      - content: A string representing the content or narrative of the chapter.    - prompts: An array of objects, each representing a prompt related to the story.    - chapter: A string representing the chapter to which the prompt is associated.    - description: A string describing the prompt content.`
     return prompt
   }
 
-  const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
-    const binary = String.fromCharCode.apply(
-      null,
-      new Uint8Array(buffer) as unknown as number[]
-    )
-    return btoa(binary)
-  }
   const fetchImageFromAPI = async () => {
     try {
       const response = await axios.get('/api/image')
@@ -251,31 +243,12 @@ const Book: React.FC = () => {
     const text = 'Your text here'
     const pdf = new jsPDF()
     pdf.text(text, 10, 10)
-
     const imageData = await fetchImageFromAPI()
     if (imageData !== null) {
       pdf.addImage(imageData, 'JPEG', 10, 30, 100, 75)
       pdf.save('output.pdf')
     } else {
       console.error('Image data is null.')
-    }
-  }
-
-  const generateImage = async () => {
-    try {
-      const response = await fetch('/api/oneimage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-      if (!response.ok) {
-        throw new Error('Failed to fetch image!')
-      }
-
-      const data = await response.json()
-      const dataString = data.data.toString()
-      console.log(dataString)
-    } catch (error) {
-      console.log("Something wen't wrong!", error)
     }
   }
   return (

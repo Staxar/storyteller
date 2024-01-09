@@ -11,7 +11,7 @@ export default function Home() {
             <p>Logo</p>
           </div>
           <div className="flex gap-4">
-            <p>Menu</p>
+            <Link href={'menu'}>Menu</Link>
             <Link href={'about'}>About</Link>
             <Link href={'/design'}>Design</Link>
             <Link href={'/book'}>Book</Link>
