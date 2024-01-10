@@ -27,6 +27,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'oaidalleapiprodscus.blob.core.windows.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'helpx.adobe.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'st2.depositphotos.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
     ],
   },
 }
