@@ -5,11 +5,12 @@ import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import fakeData from '../../assets/data/fakeData.json'
+import bookImage from '../../public/book-1129923_1280.jpg'
 
 export default function Menu() {
   const [pdfUrl, setPdfUrl] = useState<string>('')
   const [images, setImages] = useState<string[]>([
-    'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+    'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
     'https://st2.depositphotos.com/2001755/8564/i/450/depositphotos_85647140-stock-photo-beautiful-landscape-with-birds.jpg',
   ])
   const fetchImageFromAPI = async (url: string) => {
@@ -28,6 +29,7 @@ export default function Menu() {
 
   const createPdf = async () => {
     const pdf = new jsPDF()
+
     const maxWidth = pdf.internal.pageSize.getWidth()
     const maxHeight = pdf.internal.pageSize.getHeight()
     pdf.setProperties({
@@ -35,7 +37,9 @@ export default function Menu() {
     })
 
     if (typeof fakeData?.story.title === 'string') {
-      const imageDataPromises = images.map((image) => fetchImageFromAPI(image))
+      const imageDataPromises = images.map(
+        async (image) => await fetchImageFromAPI(image)
+      )
       const imageDataArray = await Promise.all(imageDataPromises)
 
       imageDataArray.forEach((imageData, index) => {
@@ -78,16 +82,35 @@ export default function Menu() {
   }
 
   const newCreatePDF = async () => {
-    const pdf = new jsPDF({ orientation: 'landscape' })
+    const pdf = new jsPDF()
 
+    // pdf.addFileToVFS('Nabla-Regular.ttf', fontData)
+    // pdf.addFont('Nabla-Regular.ttf', 'Nabla', 'normal', 'normal')
+    // pdf.addFont(nabla, 'nabla', 'latin', 'normal', 'StandardEncoding')
     const maxWidth = pdf.internal.pageSize.getWidth()
     const maxHeight = pdf.internal.pageSize.getHeight()
-
-    const dataImage = await fetchImageFromAPI(
-      'https://media.istockphoto.com/id/472360831/vector/opened-book-with-blank-pages.jpg?s=612x612&w=0&k=20&c=0Jkv-D0qiB-aW5XAs50pBDgjur6-dTbMGExWrSx2zu8='
+    console.log(pdf.getFontList())
+    pdf.setFont('times', 'bold')
+    pdf.setTextColor('white')
+    pdf.setFontSize(34)
+    const imageDataPromises = images.map(
+      async (image) => await fetchImageFromAPI(image)
     )
-    console.log(dataImage)
-    pdf.addImage(dataImage ? dataImage : '', 'PNG', 0, 0, maxWidth, maxHeight)
+
+    const imageDataArray = await Promise.all(imageDataPromises)
+
+    pdf.addImage(
+      imageDataArray[0] !== null ? imageDataArray[0] : '',
+      'JPEG',
+      0,
+      0,
+      maxWidth,
+      maxHeight
+    )
+
+    const title = pdf.splitTextToSize(fakeData?.story.title, 150)
+
+    pdf.text(title, 50, 100)
     pdf.text('test', 10, 10)
     pdf.addPage('', 'portrait')
 
