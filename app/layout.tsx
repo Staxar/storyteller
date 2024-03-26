@@ -22,12 +22,12 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'min-h-screen font-sans antialiased bg-background-adventure bg-no-repeat bg-cover bg-center',
           fontSans.variable
         )}
         suppressHydrationWarning
       >
-        {children}
+        <main className="h-full w-full items-center ">{children}</main>
       </body>
     </html>
   )
