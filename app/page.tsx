@@ -1,32 +1,24 @@
 import Image from 'next/image'
 import backgroundImage from '../assets/bgImage.jpg'
 import Link from 'next/link'
+import NavbarComponent from '@/components/NavbarComponent'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center gap-8 p-8">
-      <section id="header" className="p-4 w-full ">
-        <header className="flex flex-row gap-6 w-full justify-between">
-          <div className="flex">
-            <p>Logo</p>
+    <>
+      <NavbarComponent />
+
+      <section className="">
+        <div className="flex max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:pt-28">
+          <div className="place-self-center ">
+            <h1 className="max-w-2xl mb-4 text-4xl text-purple-700 font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl">
+              Let's create amazing adventure
+            </h1>
+            <div className="space-y-4 sm:flex sm:space-y-0 sm:space-x-4"></div>
           </div>
-          <div className="flex gap-4">
-            <p>Menu</p>
-            <Link href={'about'}>About</Link>
-            <Link href={'/design'}>Design</Link>
-            <Link href={'/book'}>Book</Link>
-          </div>
-          <div className="flex">
-            <p>User icon</p>
-          </div>
-        </header>
-      </section>
-      <section className="w-full h-full p-4">
-        <div className="flex flex-col justify-between p-4 m-4 w-2/3 gap-8">
-          <p className="text-6xl">Let's start your kid journey!</p>
-          <p className="text-4xl">Create your own personalized book!</p>
+          <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">RIGHT</div>
         </div>
       </section>
-    </main>
+    </>
   )
 }

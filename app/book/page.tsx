@@ -1,10 +1,15 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import BookForm from '@/components/Form/BookForm'
 import BookData from '../../assets/data/booksMood.json'
 import { Card } from '@/components/ui/card'
 import {} from 'react'
 import { DNA } from 'react-loader-spinner'
+import StoryData from '../../assets/data/fakeData.json'
+import jsPDF from 'jspdf'
+import axios, { AxiosResponse } from 'axios'
+import FlipBook from '@/components/FlipBook/FlipBook'
+import fakeData from '../../assets/data/fakeData.json'
 const PersonalFormData: dataObject[] = [
   {
     field: 'name',
@@ -115,7 +120,7 @@ export interface formObject {
   name: string
   placeOfAction: string
 }
-interface StoryObject {
+export interface StoryObject {
   story: {
     title: string
     chapters: Array<{
@@ -134,9 +139,13 @@ const formData: dataObject[][] = [PersonalFormData, StoryFormData]
 
 const Book: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
+  const [loadingStatus, setLoadingStatus] = useState<string>('')
+  const [loadingDescription, setLoadingDescription] = useState<string>('')
   const [response, setResponse] = useState<StoryObject | null>(null)
   const [images, setImages] = useState<string[]>([])
   const [formResponse, setFormResponse] = useState<formObject | undefined>()
+  const [pdfUrl, setPdfUrl] = useState<string>('')
+  const [showStory, setShowStory] = useState<boolean>(false)
 
   const getData = async (message: string): Promise<StoryObject | null> => {
     try {
@@ -160,8 +169,6 @@ const Book: React.FC = () => {
   }
 
   const getImage = async (prompt: string): Promise<string | null> => {
-    setLoading(true)
-
     try {
       const res = await fetch('/api/dalle', {
         method: 'POST',
@@ -181,8 +188,6 @@ const Book: React.FC = () => {
     } catch (error) {
       console.log('Error fetching image: ', error)
       return null
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -190,25 +195,39 @@ const Book: React.FC = () => {
     const getOpenAIData = async () => {
       if (formResponse) {
         setLoading(true)
-
+        setLoadingStatus('We are writing a story outline...')
         try {
           const prompt = generatePrompt()
+          console.log(prompt)
           const responseData = await getData(prompt)
+          console.log('🚀 ~ getOpenAIData ~ responseData:', responseData)
+
           setResponse(responseData)
+          setLoadingStatus('We now create images to match your story...')
+          if (responseData) {
+            const newData = responseData
+            const imagePromises =
+              newData?.prompts.map(async (item) => {
+                const res = await getImage(item.description)
+                return res
+              }) || []
 
-          const newData = responseData
-          const imagePromises =
-            newData?.prompts.map(async (item) => {
-              const res = await getImage(item.description)
-              return res
-            }) || []
-
-          const imageResults = await Promise.all(imagePromises)
-          setImages(imageResults.filter((image) => image !== null) as string[])
+            const imageResults = await Promise.all(imagePromises)
+            console.log(imageResults)
+            setImages(
+              imageResults.filter((image) => image !== null) as string[]
+            )
+            setLoadingStatus(
+              'We are sorting everything out now and you will get your story soon...'
+            )
+          }
+          // let pdf = await createPdf()
+          // setPdfUrl(pdf ? pdf : '')
         } catch (error) {
           console.log('getOpenAIData:', error)
         } finally {
           setLoading(false)
+          setLoadingStatus('')
         }
       }
     }
@@ -221,6 +240,72 @@ const Book: React.FC = () => {
     return prompt
   }
 
+  const fetchImageFromAPI = async (url: string) => {
+    try {
+      const response = await axios.get('/api/image', {
+        params: { url: url },
+      })
+      const base64 = Buffer.from(response.data, 'binary').toString('base64')
+      const imageUrl = `data:${response.headers['content-type']};base64,${base64}`
+      return imageUrl
+    } catch (error) {
+      console.error('Error fetching image:', error)
+      return null
+    }
+  }
+
+  const createPdf = async () => {
+    const pdf = new jsPDF()
+    const maxWidth = pdf.internal.pageSize.getWidth()
+    const maxHeight = pdf.internal.pageSize.getHeight()
+    pdf.setProperties({
+      title: response?.story.title,
+    })
+
+    if (typeof response?.story.title === 'string') {
+      const imageDataPromises = images.map((image) => fetchImageFromAPI(image))
+      const imageDataArray = await Promise.all(imageDataPromises)
+
+      imageDataArray.forEach((imageData, index) => {
+        pdf.addPage()
+        pdf.addImage(
+          imageData ? imageData : '',
+          'JPEG',
+          0,
+          0,
+          maxWidth,
+          maxHeight
+        )
+        pdf.setFont('courier', 'bolditalic')
+        pdf.setTextColor('white')
+        pdf.setFontSize(30)
+
+        if (index === 0) {
+          const title = pdf.splitTextToSize(response?.story.title, 150)
+          pdf.text(title, 50, 50)
+        } else {
+          const chapter = response.story.chapters[index - 1]
+          const chapterTitle = pdf.splitTextToSize(chapter.title, 150)
+          pdf.text(chapterTitle, 25, 50)
+          pdf.setFontSize(18)
+          const chapterContent = pdf.splitTextToSize(chapter.content, 150)
+          pdf.text(chapterContent, maxWidth / 5, 100, { lineHeightFactor: 1.5 })
+        }
+      })
+
+      const outString = pdf.output('datauristring', { filename: 'testPDF' })
+      return outString
+    } else {
+      console.error('Title is not a string.')
+    }
+  }
+
+  function Loading() {
+    return <h2>🌀 Loading...</h2>
+  }
+
+  console.log(response)
+  console.log(images)
   return (
     <div className="flex flex-col p-8 justify-center items-center">
       <div className="p-4 text-4xl">
@@ -228,20 +313,36 @@ const Book: React.FC = () => {
       </div>
       <Card className="p-2">
         {loading ? (
-          <DNA />
+          <div className="">
+            <DNA />
+            <div className="">
+              <p className="text-3xl">{loadingStatus}</p>
+            </div>
+          </div>
         ) : (
           <BookForm data={formData} formDataResponse={setFormResponse} />
         )}
       </Card>
-      <button
-        onClick={() =>
-          getImage(
-            'A seven-year-old boy with sparkling blue eyes and dark brown hair, wearing green pajamas, holding a glowing sword in an enchanted forest under a starlit sky, digital art'
-          )
-        }
-      >
-        Press me!
-      </button>
+      {showStory ? (
+        <Card>
+          <Suspense fallback={<Loading />}>
+            <FlipBook story={response ? response : fakeData} images={images} />
+            {/* {pdfUrl !== '' && (
+         <iframe
+           src={`${pdfUrl}#zoom=40`}
+           id="pdf"
+           width={1000}
+           height={600}
+         />
+       )} */}
+          </Suspense>
+        </Card>
+      ) : (
+        ''
+      )}
+
+      <button onClick={() => setShowStory(true)}>Show story on book!</button>
+      {/* <button onClick={() => createPdf()}>Test IMAGE</button> */}
     </div>
   )
 }
