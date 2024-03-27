@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
+import NavbarComponent from '@/components/NavbarComponent'
 
 export const metadata: Metadata = {
   title: 'StoryTeller',
@@ -27,7 +28,10 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
-        <main className="h-full w-full items-center ">{children}</main>
+        <main className="h-full w-full">
+          <NavbarComponent />
+          {children}
+        </main>
       </body>
     </html>
   )

@@ -88,7 +88,7 @@ export default function BookForm({ data, formDataResponse }: DataInterface) {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex">
         <div className="flex flex-col gap-4 items-center">
           <div className="flex flex-row gap-8">
             <div className="flex flex-col">

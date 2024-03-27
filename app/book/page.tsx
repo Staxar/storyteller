@@ -307,11 +307,11 @@ const Book: React.FC = () => {
   console.log(response)
   console.log(images)
   return (
-    <div className="flex flex-col p-8 justify-center items-center">
-      <div className="p-4 text-4xl">
-        <p>Give us some information to create a unique story</p>
-      </div>
-      <Card className="p-2">
+    <div className="flex flex-col py-12 px-8 justify-center items-center">
+      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight m-4 text-white">
+        Create Your own story!
+      </h3>
+      <Card className="p-2 bg-transparent">
         {loading ? (
           <div className="">
             <DNA />
