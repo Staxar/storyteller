@@ -1,7 +1,3 @@
-import Image from 'next/image'
-import backgroundImage from '../assets/bgImage.jpg'
-import Link from 'next/link'
-import NavbarComponent from '@/components/NavbarComponent'
 
 export default function Home() {
   return (

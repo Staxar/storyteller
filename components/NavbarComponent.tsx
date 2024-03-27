@@ -1,4 +1,3 @@
-import { LogOut, TvIcon } from 'lucide-react'
 import { DropdownMenuAvatarMenu } from './DropDownAvatarMenu'
 import Link from 'next/link'
 
@@ -22,7 +21,7 @@ function NavbarComponent() {
           <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
             StoryTeller
           </h3>
-          <div className="flex items-center lg:order-2 lg:hidden">
+          <div className="flex items-center lg:order-2">
             <DropdownMenuAvatarMenu />
           </div>
           <div
